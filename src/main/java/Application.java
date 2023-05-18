@@ -1,5 +1,4 @@
 import dao.EmployeeDAOImpl;
-import model.Employee;
 
 import java.sql.*;
 
