@@ -3,7 +3,6 @@ package dao;
 import model.Employee;
 import java.sql.*;
 import java.util.*;
-;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 
@@ -29,38 +28,50 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             preparedStatement.setInt(5,employee.getCity_id());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
     @Override
     public Employee findById(Integer id) {
+        Employee employee = new Employee();
         try (PreparedStatement preparedStatement = connection.prepareStatement
                 ("SELECT * FROM employee INNER JOIN city ON employee.city_id = city.city_id AND id = (?)")) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return Employee.create(resultSet);
+            while (resultSet.next()) {
+                employee.setId(Integer.parseInt(resultSet.getString("id")));
+                employee.setFirst_name(resultSet.getString("first_name"));
+                employee.setLast_name(resultSet.getString("last_name"));
+                employee.setGender(resultSet.getString("gender"));
+                employee.setAge(Integer.parseInt(resultSet.getString("age")));
+                employee.setCity_id(resultSet.getInt("city_id"));
             }
-            return null;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+        return employee;
     }
 
     @Override
     public List<Employee> findAll() {
+        List<Employee> employeeList = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement
                 ("SELECT * FROM employee INNER JOIN city ON employee.city_id = city.city_id")) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            List<Employee> result = new ArrayList<>();
             while (resultSet.next()) {
-                result.add(Employee.create(resultSet));
+                Integer id = Integer.parseInt(resultSet.getString("id"));
+                String first_name = resultSet.getString("first_name");
+                String last_name = resultSet.getString("last_name");
+                String gender = resultSet.getString("gender");
+                Integer age = Integer.parseInt(resultSet.getString("age"));
+                Integer city_id = resultSet.getInt("city_id");
+                employeeList.add(new Employee(id, first_name, last_name, gender, age, city_id));
             }
-            return result;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+        return employeeList;
     }
 
     @Override
@@ -80,7 +91,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             preparedStatement.setInt(6, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -90,7 +101,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 }
