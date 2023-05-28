@@ -10,7 +10,7 @@ public interface EmployeeDAO {
 
     List<Employee> findAll();
 
-    void update(Integer id, String first_name, String last_name, String gender, Integer age, Integer city_id);
+    void update(Employee employee);
 
-    void deleteById(Integer id);
+    void delete(Employee employee);
 }
