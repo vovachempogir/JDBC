@@ -1,19 +1,24 @@
 package model;
 
 import lombok.*;
-import java.sql.*;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "city")
 public class City {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Integer city_id;
+    @Column
     private String city_name;
 
-    public static City create(ResultSet resultSet) throws SQLException {
-        City city = new City();
-        city.setCity_id(resultSet.getInt("city_id"));
-        city.setCity_name(resultSet.getString("city_name"));
-        return city;
-    }
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "city")
+    private List<Employee> employees;
+
 }

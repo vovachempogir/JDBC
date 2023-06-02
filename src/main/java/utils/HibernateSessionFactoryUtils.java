@@ -1,5 +1,6 @@
 package utils;
 
+import model.City;
 import model.Employee;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -11,7 +12,7 @@ public class HibernateSessionFactoryUtils {
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             Configuration conf = new Configuration().configure("hibernate.cfg.xml");
-            conf.addAnnotatedClass(Employee.class);
+            conf.addAnnotatedClass(Employee.class).addAnnotatedClass(City.class);
             sessionFactory = conf.buildSessionFactory(
                     new StandardServiceRegistryBuilder().applySettings(conf.getProperties()).build()
             );

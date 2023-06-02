@@ -3,13 +3,12 @@ package model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.*;
 
-@Entity
-@Table(name = "employee")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "employee")
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,17 +22,8 @@ public class Employee {
     private String gender;
     @Column(name = "age")
     private Integer age;
-    @Column(name = "city_id")
-    private Integer city_id;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "city_id")
+    private City city;
 
-    public static Employee create(ResultSet resultSet) throws SQLException {
-        Employee employee = new Employee();
-        employee.setId(resultSet.getInt("id"));
-        employee.setFirst_name(resultSet.getString("first_name"));
-        employee.setLast_name(resultSet.getString("last_name"));
-        employee.setGender(resultSet.getString("gender"));
-        employee.setAge(resultSet.getInt("age"));
-        employee.setCity_id(resultSet.getInt("city_id"));
-        return employee;
-    }
 }

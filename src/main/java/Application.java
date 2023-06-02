@@ -1,34 +1,49 @@
+import dao.CityDAO;
+import dao.CityDAOImpl;
 import dao.EmployeeDAO;
 import dao.EmployeeDAOImpl;
+import model.City;
 import model.Employee;
 
-import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Application {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         EmployeeDAO employeeDAO = new EmployeeDAOImpl();
+        CityDAO cityDAO = new CityDAOImpl();
 
 //        Создание объекта
-        Employee employee1 = new Employee(null,"first_name","last_name","gender",22,1);
-        employeeDAO.create(employee1);
+        Employee employee1 = new Employee();
+        employee1.setFirst_name("Иван");
+        employee1.setLast_name("Иванов");
+        employee1.setGender("муж");
+        employee1.setAge(34);
 
-//        Поиск объекта
-        System.out.println(employeeDAO.findById(10));
+        Employee employee2 = new Employee();
+        employee2.setFirst_name("Петр");
+        employee2.setLast_name("Петров");
+        employee2.setGender("муж");
+        employee2.setAge(23);
 
-//        Поиск всех объектов
-        employeeDAO.findAll().forEach(System.out::println);
+        City city1 = new City();
+        city1.setCity_name("Орел");
+        city1.setEmployees(new ArrayList<Employee>(Arrays.asList(employee1, employee2)));
+        cityDAO.create(city1);
+        System.out.println(city1);
 
-        Employee employee2 = employeeDAO.findById(10);
-//        Изменение объекта
-        employee2.setFirst_name("first_name2");
-        employee2.setLast_name("last_name2");
-        employee2.setGender("man");
-        employee2.setAge(32);
-        employee2.setCity_id(2);
+        City city = cityDAO.findById(7);
+
+        employee1.setCity(city);
+        employee2.setCity(city);
+
+        employeeDAO.update(employee1);
         employeeDAO.update(employee2);
-        System.out.println(employeeDAO.findById(10));
 
-//        Удаление объекта
-        employeeDAO.delete(employee2);
+        cityDAO.deleteById(7);
+
+
+
     }
 }
